@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+	<h:outputStylesheet name="webjars/font-awesome/4.4.0/css/font-awesome.css" />
+	<h:outputStylesheet library="css" name="myCSS.css" />
+</h:head> 
+<body> 
+
+
+
+
+	<h:form id="form">
+    <p:dataTable id="tableStateDT" var="copii" value="#{modelSapp.allCopiiParintiSapp}" widgetVar="copiiSappTable" multiViewState="true"
+                 rows="10" paginator="true"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="5,10,15"
+                 selectionMode="single" selection="#{modelSapp.selectedCopillSapp}" rowKey="#{copii.id}"
+                 emptyMessage="No cars found with given criteria" filteredValue="#{modelSapp.filteredCopiiParinti}">
+ 
+        <f:facet name="header">
+            <p:outputPanel style="padding-left: 75%;">
+                <h:outputText value="Search all fields: " />
+                <p:inputText id="globalFilter" onkeyup="PF('copiiSappTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+            </p:outputPanel>
+        </f:facet>
+ 
+       <p:ajax event="rowSelect" update=":form:copillDetail" oncomplete="PF('copillDialog').show()" />
+ 
+        <p:column headerText="Nume" filterBy="#{copii.nume}" sortBy="#{copii.nume}" filterMatchMode="contains">
+            <h:outputText value="#{copii.nume}" />
+        </p:column>
+ 
+        <p:column headerText="Prenume" filterBy="#{copii.prenume}" sortBy="#{copii.prenume}" filterMatchMode="startsWith">
+            <h:outputText value="#{copii.prenume}" />
+        </p:column>
+ 
+        <p:column headerText="Data Nasterii" filterBy="#{copii.dataNasterii}" sortBy="#{copii.dataNasterii}" filterMatchMode="exact">
+            <h:outputText value="#{copii.dataNasterii}" />
+        </p:column>
+        
+    </p:dataTable>
+    
+    
+    
+    
+    
+    <p:dialog header="Copill Info" widgetVar="copillDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="copillDetail" style="text-align:center;">
+            <p:panelGrid  columns="2" columnClasses="label,value">
+                
+                <h:outputText value="Nume:" />
+                <h:outputText value="#{modelSapp.selectedCopillSapp.nume}" />
+ 
+                <h:outputText value="Prenume:" />
+                <h:outputText value="#{modelSapp.selectedCopillSapp.prenume}" />
+ 
+                <h:outputText value="Data Nasterii:" />
+                <h:outputText value="#{modelSapp.selectedCopillSapp.dataNasterii}" />
+ 
+                <p:commandButton value="View Parinti"  id="ajaxViewParinti" styleClass="ui-priority-primary" >
+    				<p:ajax event="click" update=":form:copillAddPan" oncomplete="PF('copillAdd').show()" />
+    			</p:commandButton>
+    			
+    			<p:commandButton value="Edit CopiiSapp" actionListener="#{modelSapp.initUpdate()}"  id="ajax_Edit" styleClass="ui-priority-primary" >
+    				<p:ajax event="click" update=":form:editCopillSappDetail" oncomplete="PF('editCopillSapp').show()" />
+    			</p:commandButton>
+    			
+    			<p:commandButton value="Delete CopiiSapp"  id="ajax_Delete" styleClass="ui-priority-primary" >
+    				<p:ajax event="click" update=":form:deleteCopillSappDetail" oncomplete="PF('deleteCopillSapp').show()" />
+    			</p:commandButton>
+    			
+    			
+                
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    
+    
+    
+    
+    
+    
+    <p:dialog header="Add Copill" widgetVar="copillAdd" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="copillAddPan" style="text-align:center;">
+            
+            
+            <p:dataTable id="tableStateDT2888" var="parinte" value="#{modelSapp.getParintiByCopiiSappId(modelSapp.selectedCopillSapp.id)}" widgetVar="parinteTable" multiViewState="true"
+                 rows="10" paginator="true"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="5,10,15"
+                 selectionMode="single" selection="#{modelSapp.selectedParinti}" rowKey="#{parinte.id}"
+                 emptyMessage="No cars found with given criteria" filteredValue="#{modelSapp.filteredParinti}">
+ 
+        <f:facet name="header">
+            <p:outputPanel style="padding-left: 75%;">
+                <h:outputText value="Search all fields: " />
+                <p:inputText id="globalFilter" onkeyup="PF('parinteTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+            </p:outputPanel>
+        </f:facet>
+ 
+       <p:ajax event="rowSelect" update=":form:parinteDetail" oncomplete="PF('parinteDialog').show()" />
+ 
+        <p:column headerText="Nume" filterBy="#{parinte.nume}" sortBy="#{parinte.nume}" filterMatchMode="contains">
+            <h:outputText value="#{parinte.nume}" />
+        </p:column>
+ 
+        <p:column headerText="Prenume" filterBy="#{parinte.prenume}" sortBy="#{parinte.prenume}" filterMatchMode="startsWith">
+            <h:outputText value="#{parinte.prenume}" />
+        </p:column>
+ 
+        <p:column headerText="Data Nasterii" filterBy="#{parinte.dataNasterii}" sortBy="#{parinte.dataNasterii}" filterMatchMode="exact">
+            <h:outputText value="#{parinte.dataNasterii}" />
+        </p:column>
+        
+    </p:dataTable>
+
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <p:dialog header="Parinti Info" widgetVar="parinteDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="parinteDetail" style="text-align:center;">
+            <p:panelGrid  columns="2" columnClasses="label,value">
+                
+                <h:outputText value="Nume:" />
+                <h:outputText value="#{modelSapp.selectedParinti.nume}" />
+ 
+                <h:outputText value="Prenume:" />
+                <h:outputText value="#{modelSapp.selectedParinti.prenume}" />
+ 
+                <h:outputText value="Data Nasterii:" />
+                <h:outputText value="#{modelSapp.selectedParinti.nume}" />
+ 
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    	
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	 <p:dialog header="Editare CopilSapp" widgetVar="editCopillSapp" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="editCopillSappDetail" style="text-align:center;">
+            <p:panelGrid columns="2" columnClasses="label,value">
+                
+	               <h:outputText value="#{modelSapp.selectedCopillSapp.prenume}" />
+	               <p:inputText  value="#{modelSapp.selectedCopillSapp.nume}" style="width:100%"/>
+           		
+	               <h:outputText value="#{modelSapp.selectedCopillSapp.prenume}" />
+	               <p:inputText  value="#{modelSapp.selectedCopillSapp.prenume}" style="width:100%"/>
+	               
+ 				<p:growl id="growl2" life="2000" />
+                <p:commandButton value="Submit" actionListener="#{modelSapp.updateCopil()}" id="ajaxeditCopilSapp" styleClass="ui-priority-primary" update=":form:tableStateDT, :form:copillDetail, growl2" oncomplete="PF('editCopillSapp').hide()" >
+    			</p:commandButton>
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    
+    
+    
+    
+    <p:dialog header="Sterge CopilSapp" widgetVar="deleteCopillSapp" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="deleteCopillSappDetail" style="text-align:center;">
+            <p:panelGrid columns="2" columnClasses="label,value">
+                
+ 				<p:growl id="growl3" life="2000" />
+                <p:commandButton value="Sterge" actionListener="#{modelSapp.deleteCopilSapp()}"  id="ajax_delete_CopilSapp" styleClass="ui-priority-primary" >
+                	<p:ajax event="click" update=":form:tableStateDT, growl3" oncomplete="PF('copillDialog').hide(), PF('deleteCopillSapp').hide()" />
+    			</p:commandButton>
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    </h:form>
+    
+    
+    
+    <h:form id="addFormSapp">
+    
+    
+    
+    
+	    <p:commandButton value="Add Copil" actionListener="#{modelSapp.initAddLists()}" id="ajax1" styleClass="ui-priority-primary" >
+	    	<p:ajax event="click"  oncomplete="PF('copillAddSappTab').show()" />
+	    </p:commandButton>
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+	    <p:dialog header="Add Copill" widgetVar="copillAddSappTab" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+	    	<p:outputPanel id="copiiAddDetail" style="text-align:center;">
+		    	<p:dataTable id="tableAddCopii" var="copil" value="#{modelSapp.allCopiiListForAdd}">
+				    <p:column headerText="Nume">
+				        <h:outputText value="#{copil.nume}" />
+				    </p:column>
+				 
+				    <p:column headerText="Prenume">
+				        <h:outputText value="#{copil.prenume}" />
+				    </p:column>
+				    
+				</p:dataTable>
+				</p:outputPanel>
+				<p:outputPanel id="parintiAddDetail" style="text-align:center;">
+				<p:dataTable id="tableAddParinti" var="parinti" value="#{modelSapp.forAddParinti}">
+				    <p:column headerText="Nume">
+				        <h:outputText value="#{parinti.nume}" />
+				    </p:column>
+				 
+				    <p:column headerText="Prenume">
+				        <h:outputText value="#{parinti.prenume}" />
+				    </p:column>
+				    
+				</p:dataTable>
+				
+				<p:commandButton value="Add Copil Form"  id="ajaxCopil" styleClass="ui-priority-primary" >
+	    			<p:ajax event="click"  oncomplete="PF('copillAddSapp').show()" />
+	    		</p:commandButton>
+	    		
+	    		<p:commandButton value="Add Parinte Form"  id="ajaxParinte" styleClass="ui-priority-primary" >
+	    			<p:ajax event="click"  oncomplete="PF('parintiAddSapp').show()" />
+	    		</p:commandButton>
+	    		
+	    		 <p:commandButton value="AddToDB" actionListener="#{modelSapp.addCopiiParintiList()}"  id="ajaxAddDB" styleClass="ui-priority-primary" update=":form:tableStateDT, :addFormSapp:tableAddCopii, :addFormSapp:tableAddParinti" oncomplete="PF('copillAddSappTab').hide()" />
+    		</p:outputPanel>
+		</p:dialog>
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	<p:dialog header="Add Copill" widgetVar="copillAddSapp" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="copillAddSappDetail" style="text-align:center;">
+            <p:panelGrid columns="2" columnClasses="label,value">
+                
+                <h:outputText value="Nume:" />
+                <p:inputText value="#{modelSapp.addCopillSapp.nume}" />
+ 
+                <h:outputText value="Prenume" />
+                <p:inputText value="#{modelSapp.addCopillSapp.prenume}" />
+                
+                <p:commandButton value="Submit" actionListener="#{modelSapp.addCopillToList()}"  id="ajax3" styleClass="ui-priority-primary" update=":addFormSapp:copiiAddDetail">
+                	<p:ajax event="click" oncomplete=" PF('copillAddSapp').hide()" />
+    			</p:commandButton>
+
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	    <p:dialog header="Add Parinte" widgetVar="parintiAddSapp" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+	        <p:outputPanel id="parintiAddSappDetail" style="text-align:center;">
+	            <p:panelGrid columns="2" columnClasses="label,value">
+	                
+	                <h:outputText value="Nume:" />
+	                <p:inputText value="#{modelSapp.addParinte.nume}" />
+	 
+	                <h:outputText value="Prenume" />
+	                <p:inputText value="#{modelSapp.addParinte.prenume}" />
+	                
+	                <p:commandButton value="Submit" actionListener="#{modelSapp.addParintiToList()}"  id="ajaxparintiAdd" styleClass="ui-priority-primary" 
+	                					update=":addFormSapp:parintiAddDetail" oncomplete="PF('parintiAddSapp').hide()" />
+	                	
+	    			
+	
+	            </p:panelGrid>
+	        </p:outputPanel>
+	    </p:dialog>
+	    
+	    </h:form>
+	    
+</body> 
+</html>
